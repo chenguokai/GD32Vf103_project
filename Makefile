@@ -1,3 +1,8 @@
+# This is the Makefile templete for my GD32VF103 project
+# Chen Guokai (chenguokai17@mails.ucas.ac.cn) 
+# 2019 All rights reserved
+###################
+
 BUILD_DIR = ./build
 PROJECT_NAME = test
 
@@ -120,3 +125,4 @@ $(BUILD_DIR)/%.s: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 
 clean:
 	-rm -fR $(BUILD_DIR)/*
+	find . -type f -name "*.d" -delete
