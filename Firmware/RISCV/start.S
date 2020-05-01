@@ -68,7 +68,7 @@
     .weak  CAN1_RX1_IRQHandler
     .weak  CAN1_EWMC_IRQHandler
     .weak  USBFS_IRQHandler
-
+    .align 9
 vector_base:
     j _start
     .align    2
@@ -235,6 +235,7 @@ _start0800:
 	la a0, __libc_fini_array
 	call atexit
 	call __libc_init_array
+    call _init
 
 
 	/* argc = argv = 0 */

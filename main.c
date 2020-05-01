@@ -35,6 +35,7 @@ OF SUCH DAMAGE.
 #include "gd32vf103.h"
 #include "systick.h"
 #include <stdio.h>
+#include "gd32vf103_eclic.h"
 
 /*!
     \brief      main function
@@ -45,7 +46,11 @@ OF SUCH DAMAGE.
 int main(void)
 {
     int i;
-
+    eclic_global_interrupt_enable();
+    timer_begin();
+    rcu_periph_clock_enable(RCU_GPIOA);
+    gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_1);
+    gpio_bit_reset(GPIOA, GPIO_PIN_1);
     while(1){
         /* turn on led1, turn off led4 */
         ++i;

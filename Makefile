@@ -51,7 +51,11 @@ Firmware/RISCV/write_hex.c \
 Firmware/RISCV/your_printf.c \
 Firmware/GD32VF103_standard_peripheral/system_gd32vf103.c \
 Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_usart.c \
+Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_eclic.c \
+Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_rcu.c \
+Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_gpio.c \
 main.c \
+timer.c \
 systick.c 
 #Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_gpio.c 
 #Firmware/GD32VF103_standard_peripheral/Source/gd32vf103_rcu.c 
@@ -114,15 +118,15 @@ OBJECTS = $(C_SOURCES:.c=.o)
 ###################
 ## the objects to generate
 $(OBJECTS_ASM): %.o: %.S
-	$(AS) $(ASFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
+	@$(AS) $(ASFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
 
 $(OBJECTS): %.o: %.c
 	@echo "building objects"
-	$(CC) $(CFLAGS) -Wa,-a,-ad  -c $< -o $(BUILD_DIR)/$(notdir $@)
+	@$(CC) $(CFLAGS) -Wa,-a,-ad  -c $< -o $(BUILD_DIR)/$(notdir $@)
 
 $(BUILD_DIR)/$(PROJECT_NAME).elf: $(OBJECTS) $(OBJECTS_ASM)
 	@echo "Building ELF files"
-	$(CC) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS_ASM))) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS)))  $(LDFLAGS) -o $@
+	@$(CC) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS_ASM))) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS)))  $(LDFLAGS) -o $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(COPY) -O ihex $< $@
