@@ -110,6 +110,9 @@ ASFLAGS += -Wall -fdata-sections -ffunction-sections
 ASFLAGS += -MMD -MF"$(@:%.o=%.d)" 
 ASFLAGS += -g $(OPT) $(C_DEFS) $(C_INCLUDES) $(AS_DEFS) $(AS_INCLUDES)
 
+# Not enabled by default
+AS_DEBUG = -Wa,-a,-ad
+
 LDFLAGS += -g $(OPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(EXE).map,--cref -Wl,--gc-sections
 
 OBJECTS_ASM = $(ASM_SOURCES:.S=.o)
@@ -122,11 +125,11 @@ $(OBJECTS_ASM): %.o: %.S
 
 $(OBJECTS): %.o: %.c
 	@echo "building objects"
-	@$(CC) $(CFLAGS) -Wa,-a,-ad  -c $< -o $(BUILD_DIR)/$(notdir $@)
+	$(CC) $(CFLAGS) -c $< -o $(BUILD_DIR)/$(notdir $@)
 
 $(BUILD_DIR)/$(PROJECT_NAME).elf: $(OBJECTS) $(OBJECTS_ASM)
 	@echo "Building ELF files"
-	@$(CC) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS_ASM))) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS)))  $(LDFLAGS) -o $@
+	$(CC) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS_ASM))) $(addprefix $(BUILD_DIR)/, $(notdir $(OBJECTS)))  $(LDFLAGS) -o $@
 
 $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(COPY) -O ihex $< $@
